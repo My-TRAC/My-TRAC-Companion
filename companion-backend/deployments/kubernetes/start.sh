@@ -22,6 +22,10 @@ kubectl apply -f mytrac-webapp.yaml
 
 kubectl apply -f mytrac-ingress.yaml
 
+#kubectl apply -f otp-be-nl.yaml
+#kubectl apply -f otp-pt.yaml
+#kubectl apply -f otp-gr.yaml
+#kubectl apply -f otp-ca.yaml
 
 echo "Deploying Sparsity DONE"
 

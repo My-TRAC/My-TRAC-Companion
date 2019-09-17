@@ -15,5 +15,10 @@ kubectl delete -f mongo-companion-backend-deployment.yaml
 kubectl delete -f mysql-companion-backend-deployment.yaml
 kubectl delete secret deploy-conf
 
+#kubectl delete -f otp-be-nl.yaml
+#kubectl delete -f otp-pt.yaml
+#kubectl delete -f otp-gr.yaml
+#kubectl delete -f otp-ca.yaml
+
 echo "Undeploying Sparsity DONE"
 

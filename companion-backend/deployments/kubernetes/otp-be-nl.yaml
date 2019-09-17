@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: otp-be-nl
+  name: otp-be-nl
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: otp-be-nl
+    spec:
+      containers:
+      - name: otp-be-nl
+        image: mytrac/otp-be-nl:v2.0
+        resources:
+          limits:
+            memory: "15Gi"
+        ports:
+          - containerPort: 8080
+        env:
+          - name: COMMAND_JAVA
+            value: "java -Xmx15G -cp /var/otp/otp.jar:/var/otp/jython.jar org.opentripplanner.standalone.OTPMain --router europe --server"
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: otp-be-nl
+  name: otp-be-nl
+spec:
+  type: NodePort
+  ports:
+  - name: otp-be-nl-server
+    port: 8080
+  selector:
+    io.kompose.service: otp-be-nl
+status:
+  loadBalancer: {}
