@@ -16,7 +16,7 @@ chmod +x ./ConfigurationScripts/*.sh
 
 sleep 60
 
-java -cp /root/MYSQLInitDataModel-1.0-SNAPSHOT-jar-with-dependencies.jar MYSQLInitDataModel --username $MYSQL_USER --password $MYSQL_PASSWORD --database $MYSQL_DATABASE --topic-names activity,mobility_trace,facility,poi,user,user_chooses_route,user_evaluates_activity,user_joins_group,user_uses_app,user_views_activity --schema-registry http://$SCHEMA_REGISTRY_HOST_NAME:8081 --mysql $MYSQL_HOST':'$MYSQL_PORT
+java -cp /root/MYSQLInitDataModel-1.0-SNAPSHOT-jar-with-dependencies.jar MYSQLInitDataModel --username $MYSQL_USER --password $MYSQL_PASSWORD --database $MYSQL_DATABASE --topic-names activity,mobility_trace,facility,poi,user,user_chooses_route,user_evaluates_activity,user_joins_group,user_uses_app,user_views_activity,user_reward --schema-registry http://$SCHEMA_REGISTRY_HOST_NAME:8081 --mysql $MYSQL_HOST':'$MYSQL_PORT
 
 
 sleep 20
@@ -45,7 +45,8 @@ curl -X POST $KAFKA_CONNECT_HOST:28083/connectors -H 'Content-Type: application/
 curl -X POST $KAFKA_CONNECT_HOST:28083/connectors -H 'Content-Type: application/json' -d '{"name": "connector_source_user_uses_app","config": {"connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector","tasks.max": 1,"connection.url": "jdbc:mysql://'$MYSQL_HOST':'$MYSQL_PORT'/'$MYSQL_DATABASE'?user='$MYSQL_USER'&password='$MYSQL_PASSWORD'","mode": "timestamp+incrementing","incrementing.column.name": "id","timestamp.column.name": "updated_at","topic.prefix": "user_uses_app","poll.interval.ms": 1000,"validate.non.null":false,"timestamp.delay.interval.ms":1000,"query":"SELECT id,updated_at,IF(deleted_at is null, 1,0) AS mytrac_is_valid,CAST(user_id as CHAR) AS user_id,updated_at AS time FROM user_logins","transforms": "RenameField,createKey,extractLong", "transforms.RenameField.type": "org.apache.kafka.connect.transforms.ReplaceField$Value","transforms.RenameField.renames": "id:mytrac_id,updated_at:mytrac_last_modified","transforms.createKey.type":"org.apache.kafka.connect.transforms.ValueToKey","transforms.createKey.fields":"mytrac_id","transforms.extractLong.type":"org.apache.kafka.connect.transforms.ExtractField$Key","transforms.extractLong.field":"mytrac_id"}}'
 # sleep 5
 curl -X POST $KAFKA_CONNECT_HOST:28083/connectors -H 'Content-Type: application/json' -d '{"name": "connector_source_user_views_activity","config": {"connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector","tasks.max": 1,"connection.url": "jdbc:mysql://'$MYSQL_HOST':'$MYSQL_PORT'/'$MYSQL_DATABASE'?user='$MYSQL_USER'&password='$MYSQL_PASSWORD'","mode": "timestamp+incrementing","incrementing.column.name": "id","timestamp.column.name": "updated_at","topic.prefix": "user_views_activity","poll.interval.ms": 1000,"validate.non.null":false,"timestamp.delay.interval.ms":1000,"query":"SELECT id,updated_at,IF(deleted_at is null, 1,0) AS mytrac_is_valid,CAST(user_id as CHAR) AS user_id,activity_id,updated_at AS time FROM user_views_activities","transforms": "RenameField,createKey,extractLong", "transforms.RenameField.type": "org.apache.kafka.connect.transforms.ReplaceField$Value","transforms.RenameField.renames": "id:mytrac_id,updated_at:mytrac_last_modified","transforms.createKey.type":"org.apache.kafka.connect.transforms.ValueToKey","transforms.createKey.fields":"mytrac_id","transforms.extractLong.type":"org.apache.kafka.connect.transforms.ExtractField$Key","transforms.extractLong.field":"mytrac_id"}}'
-
+# sleep 5
+curl -X POST $KAFKA_CONNECT_HOST:28083/connectors -H 'Content-Type: application/json' -d '{"name": "connector_source_user_reward","config": {"connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector","tasks.max": 1,"connection.url": "jdbc:mysql://'$MYSQL_HOST':'$MYSQL_PORT'/'$MYSQL_DATABASE'?user='$MYSQL_USER'&password='$MYSQL_PASSWORD'","mode": "timestamp+incrementing","incrementing.column.name": "id","timestamp.column.name": "updated_at","topic.prefix": "user_reward","poll.interval.ms": 1000,"validate.non.null":false,"timestamp.delay.interval.ms":1000,"query":"SELECT id,updated_at,IF(deleted_at is null, 1,0) AS mytrac_is_valid,CAST(user_id as CHAR) AS user_id,is_login,is_trip,is_place,is_show_poi,is_rating_poi,is_sign_up AS is_signup,last_reward_done FROM user_rewards","transforms": "RenameField,createKey,extractLong", "transforms.RenameField.type": "org.apache.kafka.connect.transforms.ReplaceField$Value","transforms.RenameField.renames": "id:mytrac_id,updated_at:mytrac_last_modified","transforms.createKey.type":"org.apache.kafka.connect.transforms.ValueToKey","transforms.createKey.fields":"mytrac_id","transforms.extractLong.type":"org.apache.kafka.connect.transforms.ExtractField$Key","transforms.extractLong.field":"mytrac_id"}}'
 
 
 
@@ -88,6 +89,8 @@ sleep 20
 /root/scripts/setJDBCSinkConnector.sh "connector_sink_user_uses_app" "user_uses_app"
 # sleep 5
 /root/scripts/setJDBCSinkConnector.sh "connector_sink_user_views_activity" "user_views_activity"
+# sleep 5
+/root/scripts/setJDBCSinkConnector.sh "connector_sink_user_reward" "user_reward"
 
 #echo "Created basics source and sink"
 

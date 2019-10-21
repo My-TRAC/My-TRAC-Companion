@@ -1,0 +1,65 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /home/maguila/gopath/src/github.com/kubernetes/kompose/kompose convert
+    kompose.version: 1.18.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ws-mytrac-rewards
+  name: ws-mytrac-rewards
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ws-mytrac-rewards
+    spec:
+      containers:
+      - name: ws-mytrac-rewards
+        image: mytrac/ws-mytrac-rewards:v1.0.0
+        ports:
+          - containerPort: 8080
+        env:
+          - name: BEEGO_RUNMODE
+            value: "dev"
+          - name: CRON_EXPRESSION
+            value: "0 0 22 ? * *"
+        volumeMounts:
+        - name: deploy-conf
+          mountPath: /root/conf
+          readOnly: true
+      volumes:
+        - name: deploy-conf
+          secret:
+            secretName: deploy-conf
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: /home/maguila/gopath/src/github.com/kubernetes/kompose/kompose convert
+    kompose.version: 1.18.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ws-mytrac-rewards
+  name: ws-mytrac-rewards
+spec:
+  type: NodePort
+  ports:
+  - name: rewards-server
+    port: 8080
+    #targetPort: 8080
+  selector:
+    io.kompose.service: ws-mytrac-rewards
+status:
+  loadBalancer: {}
+
+
