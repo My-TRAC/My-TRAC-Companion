@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: otp-be-nl
-        image: mytrac/otp-be-nl:v3.0
+        image: mytrac/otp-be-nl:v3.3
         resources:
           limits:
             memory: "15Gi"
