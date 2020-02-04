@@ -1,7 +1,8 @@
 #!/bin/bash
 
-kubectl delete -f mytrac-ingress.yaml
+#kubectl delete -f mytrac-ingress.yaml
 kubectl delete -f companion-backend.yaml
+kubectl delete -f ws-mytrac-rewards.yaml
 kubectl delete -f mytrac-webapp.yaml
 kubectl delete -f polls-container.yaml
 kubectl delete -f firebase-container.yaml
