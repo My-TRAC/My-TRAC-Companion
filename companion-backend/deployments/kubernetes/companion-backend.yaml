@@ -65,7 +65,7 @@ spec:
             value: "1234"
           - name: TZ
             value: Europe/Madrid
-        image: mytrac/companion-backend:v1.1
+        image: mytrac/companion-backend:v2.0 # 2.1 contiene el 0.0 as user_reputation
         #imagePullPolicy: Never
         imagePullPolicy: Always
         name: companion-backend 

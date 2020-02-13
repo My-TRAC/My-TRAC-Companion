@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: mytrac-ws-media
-        image: mytrac/mytrac-ws-media:v1.2.0
+        image: mytrac/mytrac-ws-media:v1.2.1
         ports:
           - containerPort: 8080
         env:

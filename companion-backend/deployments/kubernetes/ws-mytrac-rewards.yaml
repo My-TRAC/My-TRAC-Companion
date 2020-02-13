@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: ws-mytrac-rewards
-        image: mytrac/ws-mytrac-rewards:v1.0.2
+        image: mytrac/ws-mytrac-rewards:v2.0.0
         ports:
           - containerPort: 8080
         env:

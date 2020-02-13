@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: firebase-container
-        image: mytrac/firebase-api:v1.1.1
+        image: mytrac/firebase-api:v1.1.2
         ports:
           - containerPort: 8080
         env:

@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: tracking-container
-        image: mytrac/tracking-api:v1.0.0
+        image: mytrac/tracking-api:v1.0.1
         ports:
           - containerPort: 8080
         env:
