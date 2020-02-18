@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: ws-mytrac-register
-        image: mytrac/ws-mytrac-register:v1.1.8
+        image: mytrac/ws-mytrac-register:v2.0.0
         ports:
           - containerPort: 8080
         env:
