@@ -6,8 +6,8 @@ metadata:
     kompose.version: 1.18.0 (HEAD)
   creationTimestamp: null
   labels:
-    io.kompose.service: mytrac-webapp-container
-  name: mytrac-webapp-container
+    io.kompose.service: mytrac-ws-media
+  name: mytrac-ws-media
 spec:
   replicas: 1
   strategy:
@@ -16,14 +16,13 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: mytrac-webapp-container
+        io.kompose.service: mytrac-ws-media
     spec:
       containers:
-      - name: mytrac-webapp-container
-        image: mytrac/mytrac-webapp:v0.9.1-2020-02-10
-        imagePullPolicy: Always
+      - name: mytrac-ws-media
+        image: mytrac/mytrac-ws-media:v1.2.1
         ports:
-        - containerPort: 8080
+          - containerPort: 8080
         env:
           - name: DB_HOST
             value: 127.0.0.1:3306
@@ -44,18 +43,16 @@ spec:
           mountPath: /root/conf
           readOnly: true
 
-
       - name: cloudsql-proxy
         image: gcr.io/cloudsql-docker/gce-proxy:1.11
         command: ["/cloud_sql_proxy",
                   "-instances=buoyant-episode-216912:europe-west1:mysql-share=tcp:3306",
                   "-credential_file=/secrets/cloudsql/credentials.json"]
-
         volumeMounts:
           - name: cloudsql-instance-credentials
             mountPath: /secrets/cloudsql
             readOnly: true
-      
+
       volumes:
         - name: deploy-conf
           secret:
@@ -76,16 +73,16 @@ metadata:
     kompose.version: 1.18.0 (HEAD)
   creationTimestamp: null
   labels:
-    io.kompose.service: mytrac-webapp-container
-  name: mytrac-webapp-container
+    io.kompose.service: mytrac-ws-media
+  name: mytrac-ws-media
 spec:
   type: NodePort
   ports:
-  - name: webapp-server
+  - name: media-server
     port: 8080
-    targetPort: 8080
+    #targetPort: 8080
   selector:
-    io.kompose.service: mytrac-webapp-container
+    io.kompose.service: mytrac-ws-media
 status:
   loadBalancer: {}
 

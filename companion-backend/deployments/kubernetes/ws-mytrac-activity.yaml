@@ -20,20 +20,46 @@ spec:
     spec:
       containers:
       - name: ws-mytrac-activity
-        image: sparsitytechnologies/ws-mytrac-activity
+        image: mytrac/ws-mytrac-activity:v1.1.2
         ports:
           - containerPort: 8080
         env:
+          - name: DB_HOST
+            value: 127.0.0.1:3306
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: cloudsql-db-credentials
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cloudsql-db-credentials
+                key: password
           - name: BEEGO_RUNMODE
             value: "dev"
         volumeMounts:
         - name: deploy-conf
           mountPath: /root/conf
           readOnly: true
+
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.11
+        command: ["/cloud_sql_proxy",
+                  "-instances=buoyant-episode-216912:europe-west1:mysql-share=tcp:3306",
+                  "-credential_file=/secrets/cloudsql/credentials.json"]
+        volumeMounts:
+          - name: cloudsql-instance-credentials
+            mountPath: /secrets/cloudsql
+            readOnly: true
+
       volumes:
         - name: deploy-conf
           secret:
             secretName: deploy-conf
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: cloudsql-instance-credentials
       restartPolicy: Always
 status: {}
 

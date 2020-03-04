@@ -2,6 +2,8 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: mytrac-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "mytrac-test-static-ip"
 spec:
   rules:
   #- host: my-trac.eu #mytrac.minikube.spa
