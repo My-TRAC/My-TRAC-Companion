@@ -6,7 +6,6 @@ import Objects.Version;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import spark.Request;
 
 import java.io.BufferedReader;
@@ -14,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -186,8 +184,14 @@ public class CSVToKafkaTopic {
 
 
                                 Version version = mapper.readValue(versionString, Version.class);
-                                Schema schema1 = version.getSchema();
-                                schemas.put(schema1.getName(), schema1);
+                                try {
+                                    Schema schema1 = version.getSchema();
+                                    schemas.put(schema1.getName(), schema1);
+                                }
+                                catch (Exception e)
+                                {
+                                    System.out.println("Schema "+versionString+"couldn't be loaded.");
+                                }
                             }
                         }
 
@@ -199,7 +203,7 @@ public class CSVToKafkaTopic {
         catch (Exception e)
         {
             e.printStackTrace();
-            //while(true){}
+            while(true){}
         }
     }
 
@@ -264,11 +268,16 @@ public class CSVToKafkaTopic {
         connection = SQLConnection.getConnection(arguments.ip,arguments.database,arguments.user,arguments.pw);
         System.out.println("Connection to MYSQL established");
 
+
         String tableName=schema.getName();
 
         //Creates the table
-        String createdTable = MySQLDriver.createTable(connection,schemas.get(tableName));
+        //String createdTable = MySQLDriver.createTable(connection,schemas.get(tableName));
+        String createdTable = MySQLDriver.createTable(arguments.ip,"3306",arguments.user,arguments.pw,arguments.database,arguments.schemaregistry,tableName);
         System.out.println(createdTable);
+
+
+        connection = SQLConnection.getConnection(arguments.ip,arguments.database,arguments.user,arguments.pw);
 
         //Insert records into the table
         String InsertsErrors= MySQLDriver.insertFileContent(connection,filename,schemas.get(tableName),timer);

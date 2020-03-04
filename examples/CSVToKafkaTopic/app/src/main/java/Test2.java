@@ -1,31 +1,18 @@
+import MySQLHandlers.MySQLDriver;
+import MySQLHandlers.SQLConnection;
 import org.apache.avro.Schema;
 
-public class Test {
+import java.io.IOException;
+import java.sql.Connection;
+
+public class Test2 {
 
 
-    public static void main (String[] args)
-    {
-        String schema_string = "{\"type\":\"record\",\"name\":\"ratings\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",\"long\"],\"default\":null},{\"name\":\"user_id\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"activity_id\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"rating\",\"type\":[\"null\",\"double\"],\"default\":null}],\"connect.name\":\"ratings\"}";
-        org.apache.avro.Schema.Parser parser = new org.apache.avro.Schema.Parser();
-        org.apache.avro.Schema parse = parser.parse(schema_string);
-        System.out.println(parse);
+    public static void main (String[] args) throws InterruptedException, IOException {
+        String filename = "/Users/joan/Downloads/user_chooses_route_small.csv";
+        Connection connection  = null;// SQLConnection.getConnection("127.0.0.1:3306","connect_test","root","confluent");
 
-        for(Schema.Field f: parse.getFields())
-        {
-            String name = f.name();
-            System.out.println(name);
-            Schema schema = f.schema();
-
-            for (Schema subschema : schema.getTypes())
-            {
-                String type= subschema.getName();
-                if (!type.equals("null"))
-                    System.out.println("    "+type);
-            }
-        }
-
-
-        String tmp = "\"{\"type\":\"record\",\"name\":\"ActivitiesSummary\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"num_rated_activities\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"best_rated_activity\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"best_rating\",\"type\":[\"null\",\"double\"],\"default\":null}],\"connect.name\":\"ActivitiesSummary\"}\"";
+        MySQLDriver.insertFileContent(connection,filename,"user_chooses_route",0);
     }
 
 
