@@ -3,8 +3,8 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: otp-gr
-  name: otp-gr
+    io.kompose.service: otp-fi
+  name: otp-fi
 spec:
   replicas: 1
   strategy:
@@ -13,19 +13,19 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: otp-gr
+        io.kompose.service: otp-fi
     spec:
       containers:
-      - name: otp-gr
-        image: mytrac/otp-gr:v4.0
+      - name: otp-fi
+        image: mytrac/otp-fi:v1.0
         resources:
           limits:
-            memory: "4Gi"
+            memory: "12Gi"
         ports:
           - containerPort: 8080
         env:
           - name: COMMAND_JAVA
-            value: "java -Xmx4G -cp /var/otp/otp.jar:/var/otp/jython.jar org.opentripplanner.standalone.OTPMain --router europe --server"
+            value: "java -Xmx12G -cp /var/otp/otp.jar:/var/otp/jython.jar org.opentripplanner.standalone.OTPMain --router europe --server"
       restartPolicy: Always
 status: {}
 
@@ -36,14 +36,17 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: otp-gr
-  name: otp-gr
+    io.kompose.service: otp-fi
+  name: otp-fi
 spec:
   type: NodePort
   ports:
-  - name: otp-gr-server
+  - name: otp-fi-server
     port: 8080
   selector:
-    io.kompose.service: otp-gr
+    io.kompose.service: otp-fi
 status:
   loadBalancer: {}
+
+
+

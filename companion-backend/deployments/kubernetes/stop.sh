@@ -20,6 +20,7 @@ kubectl delete secret deploy-conf
 #kubectl delete -f otp-pt.yaml
 #kubectl delete -f otp-gr.yaml
 #kubectl delete -f otp-ca.yaml
+#kubectl delete -f otp-fi.yaml
 
 echo "Undeploying Sparsity DONE"
 

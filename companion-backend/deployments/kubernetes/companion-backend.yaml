@@ -65,7 +65,7 @@ spec:
             value: "1234"
           - name: TZ
             value: Europe/Madrid
-        image: mytrac/companion-backend:v2.2
+        image: mytrac/companion-backend:v2.3
         #imagePullPolicy: Never
         imagePullPolicy: Always
         name: companion-backend 
