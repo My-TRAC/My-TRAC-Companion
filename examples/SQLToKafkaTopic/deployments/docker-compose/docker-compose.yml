@@ -1,0 +1,31 @@
+version: "3"
+services:          
+    mysql_sqltokafkatopic:
+        image: mysql:5.7
+        container_name: mysql_sqltokafkatopic
+        #        ports:
+        #    - "3306:6566"
+        environment:
+            MYSQL_ROOT_PASSWORD: confluent
+            MYSQL_USER: confluent
+            MYSQL_PASSWORD: confluent
+            MYSQL_DATABASE: connect_test
+
+    sqltokafkatopic:
+        image: sparsitytechnologies/sqltokafkatopic:latest
+        container_name: sqltokafkatopic
+        ports:
+            - "4567:4567"
+        depends_on:
+            - mysql_sqltokafkatopic
+        environment:
+            KAFKA_CONNECT_HOST: kafka-connect
+            SCHEMA_REGISTRY_HOST: schema-registry
+            MYSQL_HOST: mysql_sqltokafkatopic
+            MYSQL_USER: confluent
+            MYSQL_PASSWORD: confluent
+            MYSQL_DATABASE: connect_test
+networks:
+    default:
+        external:
+            name: cigo-compose_default

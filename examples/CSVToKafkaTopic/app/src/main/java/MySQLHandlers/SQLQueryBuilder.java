@@ -82,8 +82,13 @@ public class SQLQueryBuilder {
         boolean first=true;
         for(String value : record)
         {
+            value= value.replace("'","");
             if(!first) sb.append(", ");
-            sb.append("'"+value+"'");
+
+            if (value.equalsIgnoreCase("NULL"))
+                sb.append(value);
+            else
+                sb.append("'"+value+"'");
             first=false;
         }
         sb.append(")");
