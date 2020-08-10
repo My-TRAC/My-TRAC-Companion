@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: ws-mytrac-trip
-        image: mytrac/ws-mytrac-trip:v2.0.3
+        image: mytrac/ws-mytrac-trip:v2.0.10
         ports:
           - containerPort: 8080
         env:

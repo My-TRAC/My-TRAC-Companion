@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: mytrac-ws-login
-        image: mytrac/mytrac-ws-login:v1.6.1
+        image: mytrac/mytrac-ws-login:v1.6.2.2020.05.18
         ports:
           - containerPort: 8080
         env:

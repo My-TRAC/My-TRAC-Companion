@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: mytrac-webapp-container
-        image: mytrac/mytrac-webapp:v0.9.1-2020-02-10
+        image: mytrac/mytrac-webapp:v1.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

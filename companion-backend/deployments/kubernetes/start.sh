@@ -15,9 +15,10 @@ kubectl apply -f ws-mytrac-trip.yaml
 kubectl apply -f ws-mytrac-activity.yaml
 kubectl apply -f firebase-container.yaml
 kubectl apply -f polls-container.yaml
-kubectl apply -f companion-backend.yaml
 kubectl apply -f mytrac-webapp.yaml
 kubectl apply -f ws-mytrac-rewards.yaml
+kubectl apply -f companion-backend.yaml
+
 
 #kubectl apply -f mytrac-ingress.yaml
 
