@@ -1,14 +1,17 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
     kompose.cmd: /home/maguila/gopath/src/github.com/kubernetes/kompose/kompose convert
     kompose.version: 1.18.0 (HEAD)
   creationTimestamp: null
-  labels:
-    io.kompose.service: ws-mytrac-activity
+  #labels:
+  #  io.kompose.service: ws-mytrac-activity
   name: ws-mytrac-activity
 spec:
+  selector:
+    matchLabels:
+      app: ws-mytrac-activity
   replicas: 1
   strategy:
     type: Recreate
@@ -17,10 +20,11 @@ spec:
       creationTimestamp: null
       labels:
         io.kompose.service: ws-mytrac-activity
+        app: ws-mytrac-activity
     spec:
       containers:
       - name: ws-mytrac-activity
-        image: mytrac/ws-mytrac-activity:v1.1.12
+        image: mytrac/ws-mytrac-activity:v1.1.13
         ports:
           - containerPort: 8080
         env:
