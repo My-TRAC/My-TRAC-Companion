@@ -1,14 +1,17 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
     kompose.cmd: /home/maguila/gopath/src/github.com/kubernetes/kompose/kompose convert
     kompose.version: 1.18.0 (HEAD)
   creationTimestamp: null
-  labels:
-    io.kompose.service: ws-mytrac-trip
+  #labels:
+  #  io.kompose.service: ws-mytrac-trip
   name: ws-mytrac-trip
 spec:
+  selector:
+    matchLabels:
+      app: ws-mytrac-trip
   replicas: 1
   strategy:
     type: Recreate
@@ -17,10 +20,11 @@ spec:
       creationTimestamp: null
       labels:
         io.kompose.service: ws-mytrac-trip
+        app: ws-mytrac-trip
     spec:
       containers:
       - name: ws-mytrac-trip
-        image: mytrac/ws-mytrac-trip:v2.0.10
+        image: mytrac/ws-mytrac-trip:v2.1.0
         ports:
           - containerPort: 8080
         env:
@@ -79,12 +83,10 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - name: trip-server
+  - name: trip-server2
     port: 8080
     #targetPort: 8080
   selector:
     io.kompose.service: ws-mytrac-trip
 status:
   loadBalancer: {}
-
-
